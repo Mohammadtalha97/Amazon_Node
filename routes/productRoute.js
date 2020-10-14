@@ -10,10 +10,19 @@ router.get("/", async (req, res) => {
   const products = await Product.find({});
   res.send(products);
 });
+// router.get("/:id", async (req, res) => {
+//   const productId = req.params.id;
+//   const product = await Product.findById(productId);
+//   res.send(product);
+// });
 router.get("/:id", async (req, res) => {
   const productId = req.params.id;
-  const product = await Product.findById(productId);
-  res.send(product);
+  const product = await Product.findOne({ _id: productId });
+  if (product) {
+    res.status(200).send(product);
+  } else {
+    res.status(404).send({ message: "Product Not Found" });
+  }
 });
 router.post("/", isAuth, isAdmin, async (req, res) => {
   try {
